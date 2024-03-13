@@ -31,9 +31,6 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: Switch to release branch
-      run: git checkout -b release
-
 
     - name: Deploy to GitHub Pages
       uses: crazy-max/ghaction-github-pages@v4
