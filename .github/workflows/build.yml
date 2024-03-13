@@ -1,0 +1,44 @@
+name: build-dist
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Switch to release branch
+      run: git checkout -b release
+
+    - name: remove pre-release
+      run: rm -rf dist/*
+
+    - name: Commit dist directory changes
+      run: |
+        git add -A
+        git commit -m "Add dist directory"
+        git push origin release
+
+
+
